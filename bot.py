@@ -37,9 +37,7 @@ run_bot(r)
 
 
 '''
-r = praw.Reddit('PRAW related-question monitor by u/_Daimon_ v 1.0.'
-                'Url: https://praw.readthedocs.io/en/latest/'
-                'pages/writing_a_bot.html')
+r = praw.Reddit('PRAW testing by u/_MrKingsBot_ v 1.0.')
 r.login()
 already_done = []
 
@@ -56,3 +54,4 @@ while True:
             already_done.append(submission.id)
     time.sleep(1800)
 '''
+
