@@ -3,26 +3,29 @@
 import praw
 import time
 import config
+import re
 
 def bot_login():
     r = praw.Reddit(username = config.username,
                 password = config.password,
                 client_id = config.client_id,
                 client_secret = config.client_secret,
-                user_agent = "MrKingsBot comment searcher v1.0")
+                user_agent = "User-Agent: test bot: 1.0 (by /u/MrKingsBot)")
     return r
-    
 
 def run_bot(r):
-    #while True:
-        for comment in r.subreddit('KingsRedditBotTesting').comments(limit=10):
-            if "king" in comment.body:
-                print("found!")
-                msg = '[me related thread](%s)' % comment.short_link
-                r.send_message('_codytheking_', 'Me Thread', msg)
-                already_done.append(comment.id)
-        #time.sleep(1800)
-    
+    already_done = []
+    while True:
+        for comment in r.subreddit('microsoft').comments(limit=10):
+            if "Linux" or "linux" in comment.body:
+                if comment.id not in already_done:
+                    #comment.reply("Oh boy")
+                    print(comment.body)
+                    #msg = '[me related thread](%s)' % comment.short_link
+                    #r.send_message('_codytheking_', 'Me Thread', msg)
+                    already_done.append(comment.id)
+        time.sleep(60)
+
 r = bot_login()
 run_bot(r)
 
@@ -54,4 +57,3 @@ while True:
             already_done.append(submission.id)
     time.sleep(1800)
 '''
-
