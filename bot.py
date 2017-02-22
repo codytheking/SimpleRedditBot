@@ -3,7 +3,8 @@
 import praw
 import time
 import config
-import re
+import pathlib
+import os.path
 
 def bot_login():
     r = praw.Reddit(username = config.username,
@@ -13,22 +14,65 @@ def bot_login():
                 user_agent = "User-Agent: test bot: 1.0 (by /u/MrKingsBot)")
     return r
 
-def run_bot(r):
-    already_done = []
-    while True:
-        for comment in r.subreddit('microsoft').comments(limit=10):
-            if "Linux" or "linux" in comment.body:
-                if comment.id not in already_done:
-                    #comment.reply("Oh boy")
-                    print(comment.body)
-                    #msg = '[me related thread](%s)' % comment.short_link
-                    #r.send_message('_codytheking_', 'Me Thread', msg)
-                    already_done.append(comment.id)
-        time.sleep(60)
+def get_saved_comments():
+    p = pathlib.Path("comments.txt")
+    
+    try:
+        with p.open() as f:
+            coms = f.read();
+            coms = coms.split("\n")
+            
+    except IOError:
+        coms = []
+    
+    return coms
+ 
+def run_bot(r, already_done):
+    for comment in r.subreddit('KingsRedditBotTesting').comments(limit=10):
+        if "Boogie" in comment.body:
+            if comment.id not in already_done and comment.author != r.user.me():
+                comment.reply("Run DMC!")
+                print("Run DMC!")
+                already_done.append(comment.id)
+                
+                with open("comments.txt", "a") as f:
+                    f.write(comment.id + "\n")
+    
+    print("Sleep for 10 seconds")
+    time.sleep(10)
 
 r = bot_login()
-run_bot(r)
+already_done = get_saved_comments()
+while True:
+    run_bot(r, already_done)
+    
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+'''
+def run_bot(r):
+    #while True:
+        for comment in r.subreddit('KingsRedditBotTesting').comments(limit=10):
+            if "king" in comment.body:
+                print("found!")
+                msg = '[me related thread](%s)' % comment.short_link
+                r.send_message('_codytheking_', 'Me Thread', msg)
+                already_done.append(comment.id)
+        #time.sleep(1800)
+    
+r = bot_login()
+run_bot(r)
+'''
 
 
 
@@ -40,7 +84,9 @@ run_bot(r)
 
 
 '''
-r = praw.Reddit('PRAW testing by u/_MrKingsBot_ v 1.0.')
+r = praw.Reddit('PRAW related-question monitor by u/_Daimon_ v 1.0.'
+                'Url: https://praw.readthedocs.io/en/latest/'
+                'pages/writing_a_bot.html')
 r.login()
 already_done = []
 
