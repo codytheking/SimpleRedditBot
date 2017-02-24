@@ -2,16 +2,12 @@
 
 import praw
 import time
-import config
 import pathlib
 import os.path
 import requests
 
 def bot_login():
-    r = praw.Reddit(username = config.username,
-                password = config.password,
-                client_id = config.client_id,
-                client_secret = config.client_secret,
+    r = praw.Reddit('simpleBot',
                 user_agent = "User-Agent: test bot: 1.0 (by /u/MrKingsBot)")
     return r
 
